@@ -93,26 +93,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void CreatePost(){
-        Post post = new Post(23,"new title", "New Text");
+        Post post = new Post(23,"Ashar Title", "Ashar text");
         Call<Post> postCall = jsonApi.createPost(post);
 
         postCall.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
-                if(!response.isSuccessful()){
-                    Toast.makeText(MainActivity.this, "Code "+ response.code(), Toast.LENGTH_SHORT).show();
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Code " + response.code() + response.errorBody(), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else{
-                    Post post = response.body();
-                        String content = "";
-                        content = "userid: "+post.getUserid()+"\n"
-                                +"id: "+ post.getId()+"\n"
-                                +"Code: "+ response.code()+"\n"
-                                +"text: "+ post.getTitle()+"\n"
-                                +"body: "+ post.getText()+"\n"+"\n";
-                        textView.append(content);
-                }
+
+                Post post = response.body();
+                String content = "";
+                content = "userid: " + post.getUserid() + "\n"
+                        + "id: " + post.getId() + "\n"
+                        + "Code: " + response.code() + "\n"
+                        + "text: " + post.getTitle() + "\n"
+                        + "body: " + post.getText() + "\n" + "\n";
+                textView.setText(content);
+
             }
 
             @Override

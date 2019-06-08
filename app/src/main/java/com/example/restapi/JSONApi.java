@@ -34,7 +34,7 @@ public interface JSONApi {
     //Difference between int and Integer is Integer takes null.
     //if we want to have to 2 or more users we simple write another userid query.
     //or better we can use simple Integer Array or list.
-    @GET("post")
+    @GET("posts")
     Call<List<Post>> getPosts(
             @Query("userid") Integer userid,
             @Query("_sort") String sort,
@@ -43,7 +43,7 @@ public interface JSONApi {
 
     //We can also use QueryMap if we dont know what would be the key and value.
     //preferable is map
-    @GET("post")
+    @GET("posts")
     Call<List<Post>> getPosts(@QueryMap Map<String,String> parameters);
 
 
@@ -55,11 +55,11 @@ public interface JSONApi {
     @GET
     Call<List<Comments>> getComments(@Url String url);
 
-    @POST("post")
+    @POST("posts")
     Call<Post> createPost(@Body Post post);
 
     @FormUrlEncoded
-    @POST("post")
+    @POST("posts")
     Call<Post> createPost(
             @Field("userid") String userid,
             @Field("title") String title,
@@ -67,7 +67,7 @@ public interface JSONApi {
     );
 
     @FormUrlEncoded
-    @POST("post")
+    @POST("posts")
     Call<Post> createPost(@FieldMap Map<String,String> parameters);
 
 }
