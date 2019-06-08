@@ -29,15 +29,12 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         jsonApi = retrofit.create(JSONApi.class);
-
-        getPost();
-
-
+        CreatePost();
     }
 
     private void getPost(){
 
-        Call<List<Post>> call = jsonApi.getPosts();
+        Call<List<Post>> call = jsonApi.getPosts(1,"id","desc");
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
@@ -90,6 +87,36 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Comments>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void CreatePost(){
+        Post post = new Post(23,"new title", "New Text");
+        Call<Post> postCall = jsonApi.createPost(post);
+
+        postCall.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if(!response.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Code "+ response.code(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    Post post = response.body();
+                        String content = "";
+                        content = "userid: "+post.getUserid()+"\n"
+                                +"id: "+ post.getId()+"\n"
+                                +"Code: "+ response.code()+"\n"
+                                +"text: "+ post.getTitle()+"\n"
+                                +"body: "+ post.getText()+"\n"+"\n";
+                        textView.append(content);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

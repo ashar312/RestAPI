@@ -5,7 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -50,5 +55,19 @@ public interface JSONApi {
     @GET
     Call<List<Comments>> getComments(@Url String url);
 
+    @POST("post")
+    Call<Post> createPost(@Body Post post);
+
+    @FormUrlEncoded
+    @POST("post")
+    Call<Post> createPost(
+            @Field("userid") String userid,
+            @Field("title") String title,
+            @Field("body") String body
+    );
+
+    @FormUrlEncoded
+    @POST("post")
+    Call<Post> createPost(@FieldMap Map<String,String> parameters);
 
 }

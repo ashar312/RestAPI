@@ -4,20 +4,19 @@ import com.google.gson.annotations.SerializedName;
 
 public class Post {
     private int userid;
-    private int id;
+    private Integer id;
     private String title;
 
     @SerializedName("body")
     private String text;
 
-    public Post(int userid, int id, String title, String text) {
+    public Post(int userid, String title, String text) {
         this.userid = userid;
-        this.id = id;
         this.title = title;
         this.text = text;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
