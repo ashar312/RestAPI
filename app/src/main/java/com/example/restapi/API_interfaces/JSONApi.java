@@ -1,4 +1,7 @@
-package com.example.restapi;
+package com.example.restapi.API_interfaces;
+
+import com.example.restapi.Comments;
+import com.example.restapi.Post;
 
 import java.util.HashMap;
 import java.util.List;

@@ -2,9 +2,10 @@ package com.example.restapi;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.restapi.API_interfaces.EmployeeAPI;
 
 import java.util.List;
 

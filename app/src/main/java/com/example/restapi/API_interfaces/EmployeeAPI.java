@@ -1,4 +1,6 @@
-package com.example.restapi;
+package com.example.restapi.API_interfaces;
+
+import com.example.restapi.EmployeeData;
 
 import java.util.List;
 
