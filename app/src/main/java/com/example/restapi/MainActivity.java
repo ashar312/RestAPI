@@ -1,7 +1,10 @@
 package com.example.restapi;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,17 +22,25 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textView;
     JSONApi jsonApi;
+    Button next;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.JSONbody);
+        next = findViewById(R.id.Next);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://jsonplaceholder.typicode.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         jsonApi = retrofit.create(JSONApi.class);
         CreatePost();
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,SecondAPI.class));
+            }
+        });
     }
 
     private void getPost(){
@@ -117,6 +128,84 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void PatchPost(){
+        Post post = new Post(20,null,"My Text");
+
+        Call<Post> postCall = jsonApi.putPost(5,post);
+        postCall.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if(!response.isSuccessful()){
+                    Toast.makeText(MainActivity.this, response.code()+"", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Post post = response.body();
+                    String content = "";
+                    content = "userid: " + post.getUserid() + "\n"
+                            + "id: " + post.getId() + "\n"
+                            + "Code: " + response.code() + "\n"
+                            + "text: " + post.getTitle() + "\n"
+                            + "body: " + post.getText() + "\n" + "\n";
+                    textView.setText(content);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void UpdataPost(){
+        Post post = new Post(20,null,"My Text");
+
+        Call<Post> postCall = jsonApi.putPost(5,post);
+        postCall.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if(!response.isSuccessful()){
+                    Toast.makeText(MainActivity.this, response.code()+"", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Post post = response.body();
+                    String content = "";
+                    content = "userid: " + post.getUserid() + "\n"
+                            + "id: " + post.getId() + "\n"
+                            + "Code: " + response.code() + "\n"
+                            + "text: " + post.getTitle() + "\n"
+                            + "body: " + post.getText() + "\n" + "\n";
+                    textView.setText(content);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void DeletePost(){
+        Call<Void> voidCall = jsonApi.DeletePost(2);
+        voidCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(MainActivity.this, response.errorBody()+"", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
