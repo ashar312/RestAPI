@@ -33,6 +33,35 @@ public class SecondAPI extends AppCompatActivity {
         getEmployees();
     }
 
+    private void getEmployee(){
+        Call<EmployeeData> dataCall = employeeAPI.GetEmployee(19879);
+        dataCall.enqueue(new Callback<EmployeeData>() {
+            @Override
+            public void onResponse(Call<EmployeeData> call, Response<EmployeeData> response) {
+                if(response.isSuccessful()){
+                    EmployeeData employeeData = response.body();
+                    String content = "";
+                    content = "id: "+employeeData.getId()+"\n"
+                            +"name: "+employeeData.getEmployee_name()+"\n"
+                            +"age: "+employeeData.getEmployee_age()+"\n"
+                            +"salary: "+employeeData.getEmployee_salary()+"\n"
+                            +"profile: "+employeeData.getProfile_image()+"\n"+"\n";
+                    textView.append(content);
+                }
+                else{
+                    Toast.makeText(SecondAPI.this, response.errorBody()+"", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EmployeeData> call, Throwable t) {
+                Toast.makeText(SecondAPI.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
     private void getEmployees(){
         Call<List<EmployeeData>> call = employeeAPI.GetEmployees();
         call.enqueue(new Callback<List<EmployeeData>>() {
