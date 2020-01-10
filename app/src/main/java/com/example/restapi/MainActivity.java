@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.restapi.API_interfaces.JSONApi;
+import com.example.restapi.API_interfaces.MyApi;
+import com.example.restapi.Models.MyModel;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     JSONApi jsonApi;
     Button next;
+    MyApi myApi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,15 +33,40 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.JSONbody);
         next = findViewById(R.id.Next);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .baseUrl("http://192.168.100.31:1000/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        myApi = retrofit.create(MyApi.class);
         jsonApi = retrofit.create(JSONApi.class);
-        CreatePost();
+       // CreatePost();
+        getPostMyAPi();
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,SecondAPI.class));
+            }
+        });
+    }
+
+    private void getPostMyAPi(){
+        Call<MyModel> call = myApi.getPosts();
+        call.enqueue(new Callback<MyModel>() {
+            @Override
+            public void onResponse(Call<MyModel> call, Response<MyModel> response) {
+                if(!response.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Code "+ response.code(), Toast.LENGTH_SHORT).show();
+                }else{
+                    MyModel myModel = response.body();
+                    textView.setText("FB NAME : "+ myModel.getFbname() + "\n" +
+                            "Content : "+ myModel.getContent() + "\n" +
+                            "Likes : "+ myModel.getLikes() + "\n" +
+                            "Comment : "+ myModel.getComments() + "\n");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyModel> call, Throwable t) {
+
             }
         });
     }
